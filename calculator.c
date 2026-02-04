@@ -5,6 +5,7 @@
 char display[50] = "0";
 char op = 0;
 
+char display[50]="0";
 HWND hDisplay;
 
 void UpdateDisplay() {
@@ -90,9 +91,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         break;
     }
 
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
+        int x=20,y=80;
+        char txt[2];
+        for(int i=0;i<=9;i++){
+            sprintf(txt,"%d",i);
+            CreateWindow("BUTTON",txt,
+                WS_VISIBLE|WS_CHILD,
+                x,y,50,40,hwnd,(HMENU)(100+i),NULL,NULL);
+            x+=60;
+            if((i+1)%3==0){x=20;y+=50;}
+        }
+        break;}
+    case WM_COMMAND:{
+        int id=LOWORD(wParam);
+        if(id>=100&&id<=109){
+            char n=(id-100)+'0';
+            if(strcmp(display,"0")==0) sprintf(display,"%c",n);
+            else{
+                int l=strlen(display);
+                display[l]=n; display[l+1]=0;
+            }
+            Update();
+        }
+        break;}
+    case WM_DESTROY: PostQuitMessage(0); break;
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);
