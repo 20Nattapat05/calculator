@@ -1,7 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 char display[50] = "0";
 char op = 0;
@@ -10,30 +9,14 @@ int newInput = 1;
 
 HWND hDisplay;
 
-void UpdateDisplay() {
-    SetWindowText(hDisplay, display);
-}
+void Update(){ SetWindowText(hDisplay,display); }
 
-double Calculate(double a, double b, char oper) {
-    switch (oper) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return (b != 0) ? a / b : 0;
-        case '%': return (a * b) / 100.0;
-    }
-    return 0;
-}
-
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    switch(msg) {
-
-    case WM_CREATE: {
-        // ช่องแสดงผล
-        hDisplay = CreateWindow("EDIT", "0",
-            WS_VISIBLE | WS_CHILD | ES_RIGHT,
-            20, 20, 260, 40,
-            hwnd, NULL, NULL, NULL);
+LRESULT CALLBACK WndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam){
+    switch(msg){
+    case WM_CREATE:{
+        hDisplay=CreateWindow("EDIT","0",
+            WS_VISIBLE|WS_CHILD|ES_RIGHT,
+            20,20,240,40,hwnd,NULL,NULL,NULL);
 
         int x = 20, y = 80;
         char txt[3];
@@ -128,26 +111,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
-
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR args, int show) {
-
-    WNDCLASS wc = {0};
-    wc.lpfnWndProc = WndProc;
-    wc.hInstance = hInst;
-    wc.lpszClassName = "CalcV4";
-
+int WINAPI WinMain(HINSTANCE h,HINSTANCE p,LPSTR a,int s){
+    WNDCLASS wc={0}; wc.lpfnWndProc=WndProc;
+    wc.hInstance=h; wc.lpszClassName="CalcV2";
     RegisterClass(&wc);
-
-    CreateWindow("CalcV4", "Calculator V4",
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-        200, 100, 330, 380,
-        NULL, NULL, hInst, NULL);
-
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0)) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
+    CreateWindow("CalcV2","Calculator V2",
+        WS_OVERLAPPEDWINDOW|WS_VISIBLE,
+        200,100,320,350,NULL,NULL,h,NULL);
+    MSG m; while(GetMessage(&m,NULL,0,0)){TranslateMessage(&m);DispatchMessage(&m);}
     return 0;
 }
